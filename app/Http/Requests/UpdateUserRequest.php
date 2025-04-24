@@ -3,11 +3,10 @@
 namespace App\Http\Requests;
 
 use App\Enums\UserEnums;
-use Illuminate\Validation\Rule;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
+use Illuminate\Foundation\Http\FormRequest;
 
-class StoreUserRequest extends FormRequest
+class UpdateUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,10 +26,13 @@ class StoreUserRequest extends FormRequest
         return [
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
+            'email' => [
+                'required',
+                'email',
+                'unique:users,email,' . $this->user->id,
+            ],
             'phone' => 'required|string|max:255',
             'role' => ['required', new Enum(UserEnums::class)],
-            'password' => 'required|string|min:8',
         ];
     }
 }

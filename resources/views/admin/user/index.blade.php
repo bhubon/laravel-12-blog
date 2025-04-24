@@ -45,7 +45,7 @@
                                         <td class=" py-2">{{ $user->phone }}</td>
                                         <td class=" py-2">{{ $user->role->label() }}</td>
                                         <td class=" py-2 text-violet-600 font-medium cursor-pointer hover:underline">
-                                            Edit</td>
+                                            <a href="{{ route('users.edit',$user) }}">Edit</a></td>
                                     </tr>
                                     @endforeach
                                 </tbody>

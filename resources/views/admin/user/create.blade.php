@@ -16,8 +16,20 @@
                             </div>
                         </div>
 
+                        @if ($errors->any())
+                            <div class="mb-4">
+                                <div class="text-sm text-red-600">
+                                    @foreach ($errors as $error)
+                                        <p>{{ $error }}</p>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+
+
                         <div class="overflow-x-hidden">
-                            <form method="POST" action="{{ route('users.store') }}" class="mt-6" enctype="multipart/form-data">
+                            <form method="POST" action="{{ route('users.store') }}" class="mt-6"
+                                enctype="multipart/form-data">
                                 @csrf
 
                                 <!-- First Name -->
@@ -48,6 +60,17 @@
                                 <div class="mb-4">
                                     <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
                                     <input type="email" name="email" id="email" value="{{ old('email') }}"
+                                        required
+                                        class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                    @error('email')
+                                        <span class="text-sm text-red-600">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <!-- Phone -->
+                                <div class="mb-4">
+                                    <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
+                                    <input type="text" name="phone" id="phone" value="{{ old('phone') }}"
                                         required
                                         class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
                                     @error('email')
@@ -87,15 +110,16 @@
                                 <div class="mb-4">
                                     <label for="image" class="block text-sm font-medium text-gray-700">Image</label>
                                     <div class="flex items-center justify-center p-4">
-                                        <img class="w-96 h-72 object-cover rounded-3xl"
+                                        <img class="w-96 h-72 object-cover rounded-3xl image-preview"
                                             src="{{ asset(\App\Models\User::PLACEHOLDER_IMAGE_PATH) }}" alt="">
                                     </div>
                                     <input name="image" type="file"
-                                    class="image-upload-input px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600"
-                                    placeholder="">
+                                        class="image-upload-input px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600"
+                                        placeholder="">
                                     @error('image')
                                         <span class="text-sm text-red-600">{{ $message }}</span>
                                     @enderror
+                                </div>
 
                                 <!-- Submit Button -->
                                 <div class="flex items-center justify-end mt-6">
@@ -115,6 +139,6 @@
         </div>
     </div>
     @push('scripts')
-    @include('components.image-placeholder-script');
+        @include('components.image-placeholder-script');
     @endpush
 </x-app-layout>

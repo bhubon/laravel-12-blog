@@ -2,7 +2,7 @@
     $(document).ready(function() {
         $('.image-upload-input').change(function() {
             const file = this.files[0];
-            const previewer = $(this).closest('.image-preview').find('img');
+            const previewer = $('.image-preview');
 
             if (file) {
                 let reader = new FileReader();
