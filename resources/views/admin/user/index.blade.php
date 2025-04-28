@@ -26,35 +26,44 @@
                                     <p class="text-gray-500">No users found.</p>
                                 </div>
                             @else
-                            <table
-                                class="min-w-full table-auto border-separate border-spacing-y-2 border-separate-gray-600">
-                                <thead class="text-left text-sm font-semibold text-gray-500">
-                                    <tr>
-                                        <th class="py-2">Name</th>
-                                        <th class="py-2">Email</th>
-                                        <th class="py-2">Phone</th>
-                                        <th class="py-2">Role</th>
-                                        <th class="py-2"></th>
-                                    </tr>
-                                </thead>
-                                <tbody class="text-sm text-gray-700">
-                                    @foreach ($users as $user)
-                                    <tr class="bg-white rounded-md shadow-sm ">
-                                        <td class=" py-2 font-medium text-gray-900">{{ $user->name }}</td>
-                                        <td class=" py-2 ">{{ $user->email }}</td>
-                                        <td class=" py-2">{{ $user->phone }}</td>
-                                        <td class=" py-2">{{ $user->role->label() }}</td>
-                                        <td class=" py-2 text-violet-600 font-medium cursor-pointer hover:underline">
-                                            <a href="{{ route('users.edit',$user) }}">Edit</a></td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                <table
+                                    class="min-w-full table-auto border-separate border-spacing-y-2 border-separate-gray-600">
+                                    <thead class="text-left text-sm font-semibold text-gray-500">
+                                        <tr>
+                                            <th class="py-2">Name</th>
+                                            <th class="py-2">Email</th>
+                                            <th class="py-2">Phone</th>
+                                            <th class="py-2">Role</th>
+                                            <th class="py-2"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-sm text-gray-700">
+                                        @foreach ($users as $user)
+                                            <tr class="bg-white rounded-md shadow-sm ">
+                                                <td class=" py-2 font-medium text-gray-900">{{ $user->name }}</td>
+                                                <td class=" py-2 ">{{ $user->email }}</td>
+                                                <td class=" py-2">{{ $user->phone }}</td>
+                                                <td class=" py-2">{{ $user->role->label() }}</td>
+                                                <td
+                                                    class=" py-2 text-violet-600 font-medium cursor-pointer hover:underline">
+                                                    <div class="flex gap-2">
+                                                        <a href="{{ route('users.edit', $user) }}">Edit</a>
+                                                        <form action="{{ route('users.destroy',$user) }}" method="POST">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button class="text-red-600" onclick="return confirm('Are you sure to delete?');">Delete</button>
+                                                        </form>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
 
 
-                            <div class="mt-4">
-                                {{ $users->links() }}
-                            </div>
+                                <div class="mt-4">
+                                    {{ $users->links() }}
+                                </div>
 
                             @endif
                         </div>

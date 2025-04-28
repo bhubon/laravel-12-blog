@@ -101,8 +101,9 @@
                                     <label for="image" class="block text-sm font-medium text-gray-700">Image</label>
                                     <div class="flex items-center justify-center p-4">
                                         <img class="w-96 h-72 object-cover rounded-3xl image-preview"
-                                            src="{{ asset(\App\Models\User::PLACEHOLDER_IMAGE_PATH) }}" alt="">
+                                            src="{{ asset($user->image_url) }}" alt="{{ $user->first_name }} {{ $user->last_name }}">
                                     </div>
+                                    {{-- Placeholder for image preview --}}
                                     <input name="image" type="file"
                                         class="image-upload-input px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600"
                                         placeholder="">

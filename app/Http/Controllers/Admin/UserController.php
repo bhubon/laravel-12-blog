@@ -6,6 +6,7 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use App\Enums\UserEnums;
+use App\Services\UserService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -29,11 +30,12 @@ class UserController extends Controller {
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreUserRequest $request) {
-        $validated = $request->validated();
+    public function store(StoreUserRequest $request, UserService $userService) {
 
-        $validated['password'] = bcrypt($validated['password']);
-        User::create($validated);
+        $userService->store(
+            $request->validated(),
+            $request->hasFile('image') ? $request->file('image') : null
+        );
 
         return redirect()->route('users.index')->with('success', 'User created successfully.');
     }
@@ -48,7 +50,7 @@ class UserController extends Controller {
     /**
      * Show the form for editing the specified resource.
      */
-public function edit(User $user) {
+    public function edit(User $user) {
         $roles = UserEnums::cases();
 
         return view('admin.user.edit', compact('user', 'roles'));
@@ -58,16 +60,24 @@ public function edit(User $user) {
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserRequest $request, User $user) {
-
-        $user->update($request->validated());
+    public function update(UpdateUserRequest $request, User $user, UserService $userService) {
+        $userService->update(
+            $request->validated(),
+            $user,
+            $request->hasFile('image') ? $request->file('image') : null
+        );
         return redirect()->back()->with('success', 'User updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id) {
-        //
+    public function destroy(User $user) {
+        if ($user->hasMedia()) {
+            $user->clearMediaCollection();
+        }
+        $user->delete();
+        return redirect()->route('users.index')->with('success', 'User deleted successfully.');
+
     }
 }

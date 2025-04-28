@@ -61,7 +61,7 @@ class User extends Authenticatable implements HasMedia {
         return $this->hasMany(Post::class);
     }
 
-    public function getImageAttribute() {
+    public function getImageUrlAttribute() {
         return $this->hasMedia()
             ? $this->getFirstMediaUrl()
             : self::PLACEHOLDER_IMAGE_PATH;
