@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Enums\PostStatusEnum;
+use App\Models\Tag;
+use App\Models\Post;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class PostController extends Controller
 {
@@ -12,7 +16,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        $posts = Post::with(['categories','tags'])->latest('id')->paginate(10);
+        return view('admin.post.index', compact('posts'));
     }
 
     /**
@@ -20,7 +25,10 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        $categories = Category::orderBy('title')->select('id','title')->get();
+        $tags = Tag::orderBy('title')->select('id','title')->get();
+        $status = PostStatusEnum::cases();
+        return view('admin.post.create', compact('categories','tags','status'));
     }
 
     /**

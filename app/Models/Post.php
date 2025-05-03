@@ -4,11 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Post extends Model {
+class Post extends Model implements HasMedia {
     /** @use HasFactory<\Database\Factories\PostFactory> */
-    use HasFactory;
-
+    use HasFactory, InteractsWithMedia;
+    public const PLACEHOLDER_IMAGE_PATH = 'images/placeholder.jpeg';
     protected $fillable = [
         'title',
         'slug',
@@ -33,5 +35,9 @@ class Post extends Model {
 
     public function comments() {
         return $this->hasMany(Comment::class);
+    }
+
+    public function getImageUrlAttribute() {
+        return $this->hasMedia() ? $this->getFirstMediaUrl() : self::PLACEHOLDER_IMAGE_PATH;
     }
 }
