@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
@@ -12,7 +13,8 @@ class CommentController extends Controller
      */
     public function index()
     {
-        //
+        $comments = Comment::with(['post:id,title'])->latest('id')->paginate(10);
+        return view('admin.comment.index',compact('comments'));
     }
 
     /**
@@ -42,24 +44,34 @@ class CommentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Comment $comment)
     {
-        //
+        $comment->load(['post:id,title']);
+        return view('admin.comment.edit',compact('comment'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Comment $comment)
     {
-        //
+        $request->validate([
+            'content' => ['required','string'],
+        ]);
+
+        $comment->update($request->only(['content']));
+
+        return redirect()->back()->with('success','Commeent successfully updated!');
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Comment $comment)
     {
-        //
+        $comment->delete();
+        return redirect()->back()->with('success','Commeent successfully deleted!');
+
     }
 }
