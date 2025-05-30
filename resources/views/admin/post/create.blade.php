@@ -19,11 +19,10 @@
                                 <h2 class="text-xl font-semibold text-gray-800">Create post</h2>
                             </div>
                         </div>
-
                         @if ($errors->any())
                             <div class="mb-4">
                                 <div class="text-sm text-red-600">
-                                    @foreach ($errors as $error)
+                                    @foreach ($errors->all() as $error)
                                         <p>{{ $error }}</p>
                                     @endforeach
                                 </div>
@@ -53,7 +52,7 @@
                                     <label for="last_name"
                                         class="block text-sm font-medium text-gray-700">Description</label>
                                     <textarea name="description" id="description" rows="4"
-                                        class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">{{ old('description') }}</textarea>
+                                        class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">{{ old('description', old('description')) }}</textarea>
                                     @error('description')
                                         <span class="text-sm text-red-600">{{ $message }}</span>
                                     @enderror
@@ -62,9 +61,9 @@
 
                                 <!-- Category -->
                                 <div class="mb-4">
-                                    <label for="category"
+                                    <label for="categories"
                                         class="block text-sm font-medium text-gray-700">Category</label>
-                                    <select name="category[]" id="categories" multiple
+                                    <select name="categories[]" id="categories" multiple
                                         class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
                                         @foreach ($categories as $category)
                                             <option value="{{ $category->id }}"
@@ -72,7 +71,7 @@
                                                 {{ $category->title }}</option>
                                         @endforeach
                                     </select>
-                                    @error('category')
+                                    @error('categories')
                                         <span class="text-sm text-red-600">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -140,8 +139,8 @@
                                     <select name="status" id="status"
                                         class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
                                         @foreach ($status as $statusKey => $statusValue)
-                                            <option value="{{ $statusKey }}"
-                                                {{ old('status') == $statusKey ? 'selected' : '' }}>
+                                            <option value="{{ $statusValue }}"
+                                                {{ old('status') == $statusValue ? 'selected' : '' }}>
                                                 {{ $statusValue->label() }}</option>
                                         @endforeach
                                     </select>
@@ -154,7 +153,7 @@
                                 <div class="flex items-center justify-end mt-6">
                                     <button type="submit"
                                         class="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                                        Create User
+                                        Create Post
                                     </button>
                                 </div>
                             </form>
