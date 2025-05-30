@@ -50,10 +50,10 @@
                                 <!-- Description -->
                                 <div class="mb-4">
                                     <label for="last_name"
-                                        class="block text-sm font-medium text-gray-700">Description</label>
-                                    <textarea name="description" id="description" rows="4"
-                                        class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">{{ old('description', old('description')) }}</textarea>
-                                    @error('description')
+                                        class="block text-sm font-medium text-gray-700">Content</label>
+                                    <textarea name="content" id="content" rows="4"
+                                        class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">{{ old('content') }}</textarea>
+                                    @error('content')
                                         <span class="text-sm text-red-600">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -201,7 +201,7 @@
 
             // ckeditor
             ClassicEditor
-                .create(document.querySelector('#description'),)
+                .create(document.querySelector('#content'),)
                 .catch(error => {
                     console.error(error);
                 });

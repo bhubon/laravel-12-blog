@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\PostUpdateRequest;
 use App\Models\Tag;
 use App\Models\Post;
 use App\Models\Category;
@@ -45,28 +46,45 @@ class PostController extends Controller {
     /**
      * Display the specified resource.
      */
-    public function show(string $id) {
-        //
+    public function show(Post $psot) {
+
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id) {
-        //
+    public function edit(Post $post) {
+        $categories = Category::orderBy('title')->select('id', 'title')->get();
+        $tags = Tag::orderBy('title')->select('id', 'title')->get();
+        $status = PostStatusEnum::cases();
+
+        $post->load(['categories', 'tags']);
+
+        return view('admin.post.edit', compact('post', 'categories', 'tags', 'status'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id) {
-        //
+    public function update(PostUpdateRequest $request, Post $post, PostService $postService) {
+        $postService->update(
+            $post,
+            $request->validated(),
+            $request->hasFile('image') ? $request->file('image') : null,
+        );
+
+        return redirect()->back()->with('success', 'Post successfully updated.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id) {
-        //
+    public function destroy(Post $post) {
+        if($post->hasMedia()){
+            $post->clearMediaCollection();
+        }
+        $post->delete();
+
+        return redirect()->back()->with('success','Post Successfully Deleted!');
     }
 }

@@ -29,4 +29,31 @@ class PostService {
         $post->categories()->sync($data['categories']);
         $post->tags()->sync($data['tags']);
     }
+    public function update(Post $post, array $data, $image = null) {
+
+        $baseSlug = Str::slug($data['title']);
+        $slug = $baseSlug;
+        $count = 1;
+
+        while (
+            Post::where('slug', $slug)
+                ->where('id', '!=', $post->id)
+                ->exists()
+        ) {
+            $slug = $baseSlug . '-' . $count++;
+        }
+
+        $data['slug'] = $slug;
+
+        $post->update($data);
+        if ($image) {
+            if ($post->hasMedia()) {
+                $post->clearMediaCollection();
+            }
+            $post->addMedia($image)->toMediaCollection();
+        }
+
+        $post->categories()->sync($data['categories']);
+        $post->tags()->sync($data['tags']);
+    }
 }
